@@ -6,6 +6,7 @@
     "deploy": "wrangler deploy --minify",
     "cf-typegen": "wrangler types --env-interface CloudflareBindings"
   },
+  "packageManager": "pnpm@12.14.0",
   "dependencies": {
     "hono": "^4.13.13"
   },
