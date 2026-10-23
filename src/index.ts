@@ -33,6 +33,10 @@ type AudioScrobblerResponse = {
   }
 }
 
+const app = new Hono<Env>();
+
+const cacheSeconds = 30;
+
 app.use(
   '/api/*',
   cors({
@@ -42,11 +46,7 @@ app.use(
   })
 )
 
-const musicApp = new Hono<Env>();
-
-const cacheSeconds = 30;
-
-musicApp.get("/api/v1/now_playing", async (c) => {
+app.get("/api/v1/now_playing", async (c) => {
   const username = c.env?.LASTFM_USERNAME;
   const apiKey = c.env?.LASTFM_API_KEY;
 
@@ -99,4 +99,4 @@ musicApp.get("/api/v1/now_playing", async (c) => {
   }
 });
 
-export default musicApp;
+export default app;
