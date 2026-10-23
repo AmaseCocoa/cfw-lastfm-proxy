@@ -50,6 +50,15 @@ app.get("/api/v1/now_playing", async (c) => {
   const username = c.env?.LASTFM_USERNAME;
   const apiKey = c.env?.LASTFM_API_KEY;
 
+  if (!username || !apiKey) {
+    console.error("Missing Last.fm configuration. USERNAME or API_KEY is empty.");
+    return c.json({
+      error: "Configuration Error",
+      message: "Last.fm API key or username is not set in the environment variables."
+    }, 500);
+  }
+
+
   try {
     const resp = await fetch(`https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${username}&api_key=${apiKey}&format=json&limit=1`);
 
@@ -87,8 +96,7 @@ app.get("/api/v1/now_playing", async (c) => {
         },
         url: currentTrack.url
       }, 200, {
-        'Cache-Control': `public, max-age=${cacheSeconds}, s-maxage=${cacheSeconds}`,
-        'Access-Control-Allow-Origin': cors
+        'Cache-Control': `public, max-age=${cacheSeconds}, s-maxage=${cacheSeconds}`
       });
     }
 
