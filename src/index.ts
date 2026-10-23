@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+import { cors } from 'hono/cors'
 
 type Env = {
   Variables: {
@@ -32,9 +33,17 @@ type AudioScrobblerResponse = {
   }
 }
 
+app.use(
+  '/api/*',
+  cors({
+    origin: 'https://amase.cc',
+    allowMethods: ['GET', 'OPTIONS'],
+    allowHeaders: ['Content-Type'],
+  })
+)
+
 const musicApp = new Hono<Env>();
 
-const cors = 'https://amase.cc'
 const cacheSeconds = 30;
 
 musicApp.get("/api/v1/now_playing", async (c) => {
